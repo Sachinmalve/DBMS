@@ -1,0 +1,108 @@
+\documentclass{article}
+\usepackage{graphicx}
+\begin{document}
+\title{RAID Storage System}
+
+
+\author{Sachin Malve \\
+	19111049 \\
+ 	6th Semester \\ 
+	Biomedical Engineering\\
+	}
+
+\maketitle 
+ \hrulefill
+
+\section{Introduction}
+ RAID is an acronym for Redundant Array of Independent Disks. With RAID enabled on a storage system you can connect two or more drives in the system so they act as one large volume fast drive or set them up as one system drive used to automatically and instantaneously duplicate (or mirror) your data for real-time backup. \\
+ RAID works by placing data on multiple disks and allowing input/output (I/O) operations to overlap in a balanced way, improving performance. Because using multiple disks increases the mean time between failures, storing data redundantly also increases fault tolerance.
+
+RAID arrays appear to the operating system (OS) as a single logical drive.
+
+RAID employs the techniques of disk mirroring or disk striping. Mirroring will copy identical data onto more than one drive. Striping partitions help spread data over multiple disk drives. Each drive's storage space is divided into units ranging from a sector of 512 bytes up to several megabytes. The stripes of all the disks are interleaved and addressed in order. Disk mirroring and disk striping can also be combined in a RAID array.\\
+
+\textbf{Table Of Content :- }
+
+
+\begin{itemize}
+\item Progression
+\item RAID Levels
+\item Software and Hardware
+\item Limitations of RAID
+\item Conclusion
+
+\end{itemize}
+
+
+\section{Progression}
+The term "RAID" was invented by David Patterson, Garth A. Gibson, and Randy Katz at the University of California, Berkeley in 1987.In 1987 a paper  argued that the top-performing mainframe disk drives of the time could be beaten on performance by an array of the inexpensive drives that had been developed for the growing personal computer market. Although failures would rise in proportion to the number of drives, by configuring for redundancy, the reliability of an array could far exceed that of any large single drive.
+
+\section{The RAID Levels }
+
+\subsection{RAID 0}
+Data is striped across drives; no data redundancy is provided.\\
+Multiple disks are used to improve performance, but there is not logic to protect/recover data. The performance gain is attained by using large blocks of data I/O and spreading the load across several disks. \\
+\includegraphics[scale=.20]{raid-0-disk-striping-1024x951} 
+
+\subsection{RAID 1}
+Data redundancy is obtained by storing exact copies on mirrored pairs of drives.
+Two or more copies of data are written to two or more different disks at the same time. Data may be read from either disk, based on device availability. Although reliability is high, so is the cost as twice the amount of disk storage must be purchased.
+While RAID 1 is capable of a much more complicated configuration, almost every use case of RAID 1 is where you have a pair of identical disks identically mirror/copy the data equally across the drives in the array. The point of RAID 1 is primarily for redundancy. If you completely lose a drive, you can still stay up and running off the additional drive.
+
+In the event that either drive fails, you can then replace the broken drive with little to no downtime. RAID 1 also gives you the additional benefit of increased read performance, as data can be read off any of the drives in the array. The downsides are that you will have slightly higher write latency. Since the data needs to be written to both drives in the array, you'll only have the available capacity of a single drive while needing two drives.\\
+\includegraphics[scale=.10]{1200px-RAID_1.svg} 
+\subsection{RAID 2}
+Data is striped at the bit level; multiple error-correcting disks provide redundancy; not a commercially implemented RAID level.\\
+\includegraphics[scale=.30]{1200px-RAID2_arch.svg} 
+
+\subsection{RAID 3}
+Data is striped at the byte level, and one drive is set aside for parity information. This does well for large files where large blocks size and sequential I/O are used. Since only one drive is used for parity, the cost is reduced from a RAID 1 implementation.\\
+\includegraphics[scale=.20]{1200px-RAID_3.svg} 
+
+\subsection{RAID 4}
+Data is striped in blocks, and one drive is set aside for parity information.\\
+\includegraphics[scale=.30]{1200px-RAID_4.svg} 
+
+\subsection{RAID 5/6 (Striping + Distributed Parity)}
+RAID 5 requires the use of at least 3 drives (RAID 6 requires at least 4 drives). It takes the idea of RAID 0, and strips data across multiple drives to increase performance. But, it also adds the aspect of redundancy by distributing parity information across the disks. There are many technical resources out there on the Internet that can get down into the details as to how this actually happens. But in short, with RAID 5 you can lose one disk, and with RAID 6 you can lose two disks, and still maintain your operations and data.
+
+RAID 5 and 6 will get you significantly improved read performance. But write performance is largely dependent on the RAID controller used. For RAID 5 or 6, you will most certainly need a dedicated hardware controller. This is due to the need to calculate the parity data and write it across all the disks. RAID 5 and RAID 6 are often good options for standard web servers, file servers, and other general purpose systems where most of the transactions are reads, and get you a good value for your money. This is because you only need to purchase one additional drive for RAID 5 (or two additional drives for RAID 6) to add speed and redundancy.
+
+RAID 5 or RAID 6 is not the best choice for a heavy write environment, such as a database server, as it will likely hurt your overall performance. 
+
+It is worth mentioning that in a RAID 5 or RAID 6 situation, if you lose a drive, you’re going to be seriusly sacrificing performance to keep your environment operational. Once you replace the failed drive, data will need to be rebuilt out of the parity information. This will take a significant amount of the total performance of the array. These rebuild times continue to grow more and more each year, as drives get larger and larger.\\
+\includegraphics[scale=.30]{raid-5-volume} 
+
+
+\subsection{RAID 10 (Mirroring + Striping)}
+RAID 10 requires at least 4 drives and is a combination of RAID 1 (mirroring) and RAID 0 (striping). This will get you both increased speed and redundancy. This is often the recommended RAID level if you're looking for speed, but still need redundancy. In a four-drive configuration, two mirrored drives hold half of the striped data and another two mirror the other half of the data. This means you can lose any single drive, and then possibly even a 2nd drive, without losing any data. Just like RAID 1, you'll only have the capacity of half the drives, but you will see improved read and write performance. You will also have the fast rebuild time of RAID 1.\\
+\includegraphics[scale=.55]{storage_raid_10_mobile} 
+
+
+\section{Software and Hardware RAID}
+
+\subsection{Software}
+Software RAID is an included option in all of Steadfast’s dedicated servers. This means there is NO cost for software RAID 1, and is highly recommended if you’re using local storage on a system. It is highly recommended that drives in a RAID array be of the same type and size.
+
+Software-based RAID will leverage some of the system’s computing power to manage the RAID configuration. If you’re looking to maximize performance of a system, such with a RAID 5 or 6 configuration, it’s best to use a hardware-based RAID card when you’re using standard HDDs.
+\subsection{Hardware}
+Hardware-based RAID requires a dedicated controller installed in the server. Steadfast engineers will be happy to provide you with recommendations regarding which hardware RAID care is best for you that is based on what RAID configuration you want to have. A hardware based RAID card does all the management of the RAID array(s), providing logical disks to the system with no overheard on the part of the system itself. Additionally, hardware RAID can provide many different types of RAID configurations simultaneously to the system. This includes providing a RAID 1 array for the boot and application drive and a RAID-5 array for the large storage array.
+
+\section{Limitations of  RAID}
+
+\begin{itemize}
+\item RAID does not equate to 100 percent uptime. Nothing can. RAID is another tool on in the toolbox meant to help minimize downtime and availability issues. There is still a risk of a RAID card failure, though that is significantly lower than a mechanical HDD drive failure.
+
+\item RAID does not replace backups. Nothing can replace a well planned and frequently tested backup implementation!
+
+\item RAID will not protect you against data corruption, human error, or security issues. While it can protect you against a drive failure, there are innumerable reasons for keeping backups. So do not take RAID as a replacement for backups. If you don’t have backups in place, you’re not ready to consider RAID as an option.
+
+\item RAID does not necessarily allow you to dynamically increase the size of the array. If you need more disk space, you cannot simply add another drive to the array. You are likely going to have to start from scratch, rebuilding/reformatting the array. Luckily, Steadfast engineers are here to help you architect and execute whatever systems you need to keep your business running. 
+ 
+\item RAID isn’t always the best option for virtualization and high-availability failover. In those circumstances, you will want to look at SAN solutions, which Steadfast also provides.
+\end{itemize}
+
+\section{Conclusion}
+In this term paper we learnt about RAID storage systems and learned about it's different levels and pros and cons of them.RAID is extremely useful if uptime and availability are important. RAID allows you to weather the failure of one or more drives without data loss and, in many cases, without any downtime. RAID is also useful if you are having disk IO issues, where applications are waiting on the disk to perform tasks. Going with RAID will provide you additional throughput by allowing you to read and write data from multiple drives instead of a single drive. Additionally, if you go with hardware RAID, the hardware RAID card will include additional memory to be used as cache, reducing the strain put on the physical hardware and increase overall performance. 
+
+\end{document}
